@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+        <script>
+            function Book(title,author,pages,read) {
+                this.title=title;
+                this.author=author;
+                this.pages=pages;
+                this.read=read;
+                this.location="";
+                
+            }
+            var arr=[];
+            function enterArr(){
+                
+                var auth=document.getElementById("Author").value;
+                var book=document.getElementById("Book").value;
+                var page=document.getElementById("Pages").value;
+
+                if(document.getElementById('Read').checked) {
+                    var Read="Read ✓";
+                }else{
+                    var Read="Unread x";
+                }
+
+                const NewBook=new Book(auth,book,page,Read);
+                NewBook.location=arr.length;
+                console.log(NewBook);
+                arr.push(NewBook);
+                event.preventDefault();
+            }
+
+            function loop(){
+                const container = document.getElementById('cards');
+                container.innerHTML = '';
+                for (const book of arr) { // Loop through the array
+                        if(book!=undefined) {
+                        const card = document.createElement('div');
+                        card.className = 'card';
+
+                        const erase = document.createElement('h3');
+                        erase.addEventListener('click', function() {
+                            console.log(book.location);
+                            delete arr[book.location];
+                            console.log(arr);
+                            loop();
+                        })
+                        erase.textContent = "X";
+                        card.appendChild(erase);
+
+                        const title = document.createElement('h3');
+                        title.textContent = book.title;
+                        card.appendChild(title);
+
+                        const author = document.createElement('p');
+                        author.textContent = "Author: " + book.author;
+                        card.appendChild(author);
+
+                        const Pages = document.createElement('p');
+                        Pages.textContent = "Number of pages: " + book.pages;
+                        card.appendChild(Pages);
+                        
+                        const Read = document.createElement('p');
+                        Read.textContent = "Status: " +  book.read + "";
+                        Read.addEventListener('click',function() {
+                            if(book.read=="Read ✓") {
+                                
+                                book.read="Unread x"
+                                console.log(book.read)
+                                Read.textContent = "Status: " +  book.read + "";
+                            } else {
+                                
+                                book.read="Read ✓";
+                                console.log(book.read)
+                                Read.textContent = "Status: " +  book.read + "";
+                            }
+                        })
+                        card.appendChild(Read);
+
+                        container.appendChild(card);
+                        }
+
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div class="sideNav"> 
+            <form method="POST">
+                <label for="book"> Name<input name="book" type="text" id="Book" ></label><br>
+                <label for="author"> Author<input name="author" type="text" id="Author" ></label><br>
+                <label for="pages"> Pages<input name="pages" type="number" id="Pages"></label><br>
+                <input  type="radio" id="Read" value="Read" name="Read"> Read<br>
+                <input  type="radio" id="Unread" value="Unread" name="Read"> Unread<br>
+                <button onclick="event.preventDefault();enterArr()">Add book to library</button>
+                <button onclick="event.preventDefault();loop()">Display library</button>
+
+            </form>
+
+        </div>
+
+
+        <div id="cards"></div>
+    </body>
+</html>
